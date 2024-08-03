@@ -5,7 +5,7 @@ import React from 'react'
 const data = [
     { id: 1, name: "Dashboard", url: "/" },
     { id: 2, name: "Product",subMenu:true },
-    { id: 3, name: "Order", url:"/" },
+    { id: 3, name: "Order", url:"order" },
     { id: 4, name: "Transaction", url:"transaction" },
     { id: 5, name: "Logout", url: "/logout" },
 ];

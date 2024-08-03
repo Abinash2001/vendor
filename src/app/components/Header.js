@@ -20,7 +20,7 @@ export const Header = () => {
       if(window.scrollY>200)
       {
         if(window.scrollY>lastScrolly && !mobileMenu)
-        {i
+        {
           setShow("-translate-y-[80px]")
         }
         else{
