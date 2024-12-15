@@ -2,8 +2,10 @@
 import React from 'react'
 import Wrapper from '../components/Wrapper'
 import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell} from "@nextui-org/react";
+import { getUsers } from '../services/userService';
 
 const page = () => {
+  const users = getUsers();
   return (
     <Wrapper>
         <div className='bg-white my-5 p-5 rounded'>
@@ -11,7 +13,8 @@ const page = () => {
             <div className=' md:text-center bg-white my-10 justify-between'>
                 <Table aria-label="Example static collection table" className=' overflow-x-auto'>
                   <TableHeader>
-                    <TableColumn className='font-bold'>User Name</TableColumn>
+                    {/* <TableColumn className='font-bold'>User Id</TableColumn> */}
+                    <TableColumn className='font-bold'>User Email</TableColumn>
                     <TableColumn className='font-bold'>Address</TableColumn>
                     <TableColumn className='font-bold'>Number</TableColumn>
                   </TableHeader>

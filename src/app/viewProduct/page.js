@@ -25,6 +25,7 @@ useEffect(()=>{
   const fetchProducts=async()=>{
     try {
       const products=await getProduct();
+      console.log(products);
       setProducts(products);
     } catch (error) {
       console.log(error);
@@ -72,8 +73,8 @@ useEffect(()=>{
                             <TableCell>{product.product_name}</TableCell>
                             <TableCell>{product.original_price}</TableCell>
                             <TableCell>{product.discounted_price}</TableCell>
-                            <TableCell>{product.quantity}</TableCell>
-                            <TableCell>{product.category}</TableCell>
+                            <TableCell>{product.stock_available}</TableCell>
+                            <TableCell>{product.category?.name}</TableCell>
                             {/* <TableCell>{product.revenue}</TableCell> */}
                             <TableCell><Link href={`/productDetail/${product._id}`} className='bg-blue-500 hover:bg-blue-600 py-0 px-2 rounded font-semibold text-white outline-none'>click</Link></TableCell>
                           </TableRow>

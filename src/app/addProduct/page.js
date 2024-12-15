@@ -4,7 +4,7 @@ import Wrapper from "../components/Wrapper";
 import { toast } from "react-toastify";
 import { addProduct } from "../services/productService";
 import { getCategory } from "../services/categoryService";
-// import { set } from 'mongoose';
+import { FaRegImages } from "react-icons/fa6";
 
 const page = () => {
   const [categories, setCategories] = useState([]);
@@ -13,9 +13,9 @@ const page = () => {
     product_description: "",
     original_price: "",
     discounted_price: "",
-    quantity: "",
+    stock_available: "",
     category: "",
-    image: "",
+    images: [], // to store multiple image in base64 format
   });
 
   const handleAddProduct = async (event) => {
@@ -23,8 +23,21 @@ const page = () => {
     // validate data....
 
     try {
+      if (
+        !product.product_name ||
+        !product.product_description ||
+        !product.original_price ||
+        !product.discounted_price ||
+        !product.stock_available ||
+        !product.category ||
+        !product.images.length
+      ) {
+        toast.error("Please fill all the fields !!", {
+          position: "bottom-right",
+        });
+        return;
+      }
       const result = await addProduct(product);
-      // console.log(product);
       toast.success("Product added", {
         position: "bottom-right",
       });
@@ -35,43 +48,44 @@ const page = () => {
         product_description: "",
         original_price: "",
         discounted_price: "",
-        quantity: "",
+        stock_available: "",
         category: "",
-        image: "",
+        images: [],
       });
     } catch (error) {
       console.log(error);
       console.log("error on addCategory function call");
-      toast.error("Category not added !!", {
+      toast.error("Product not added !!", {
         position: "bottom-right",
       });
     }
-    // console.log('Product added');
   };
 
-  //convert image to base64 and set the state of image
   const handleImageChange = (event) => {
-    var reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-    reader.onload = () => {
-      setProduct({
-        ...product,
-        image: reader.result,
+    const files = event.target.files;
+    const promises = Array.from(files).map((file) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
       });
-      reader.onerror = function (error) {
-        console.log("Error: ", error);
-      };
-    };
+    });
+    Promise.all(promises)
+      .then((imagesArray) => {
+        setProduct((prevProduct) => ({
+          ...prevProduct,
+          images: [...prevProduct.images, ...imagesArray],
+        }));
+      })
+      .catch((error) => console.error("Error: ", error));
   };
 
-  // fetch categories from the database and set the state of categories to show the dropdown
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const categories = await getCategory();
         setCategories(categories);
-        // console.log("before add category call");
-        // console.log(categories);
       } catch (error) {
         console.log(error);
         console.log("error on getCategory function call");
@@ -174,37 +188,46 @@ const page = () => {
             />
           </div>
           <div className="md:flex gap-10 md:text-center mb-5 justify-between">
-            <label htmlFor="quantity" className="text-[16px]">
-              Quantity
+            <label htmlFor="stock_available" className="text-[16px]">
+              Stock Available
             </label>
             <input
               type="number"
-              /*name="quantity"*/ className="border w-full lg:w-[80%] md:w-[70%] rounded p-[8px] mt-2 md:mt-0 outline-blue-400"
+              /*name="stock_available"*/ className="border w-full lg:w-[80%] md:w-[70%] rounded p-[8px] mt-2 md:mt-0 outline-blue-400"
               onChange={(event) => {
                 setProduct({
                   ...product,
-                  quantity: event.target.value,
+                  stock_available: event.target.value,
                 });
               }}
-              value={product.quantity}
+              value={product.stock_available}
             />
           </div>
           <div className="md:flex gap-10 md:text-center mb-5 justify-between">
-            <label htmlFor="image" className="text-[17px]">
-              Product Image
-            </label>
-            <input
-              type="file"
-              /*name="image"*/ className="border w-full lg:w-[80%] md:w-[70%] rounded p-[10px] mt-2 md:mt-0"
-              onChange={handleImageChange}
-              // onChange={(event)=> {
-              // setProduct({
-              //   ...product,
-              //   image:images
-              // });
-              // }}
-              value=""
-            />
+            <h1 className="text-[17px]">Images uploads</h1>
+            <div className="flex gap-5">
+              {product?.images.map((image, index) => {
+                return (
+                  <div className="w-[150px] h-[150px] p-[10px] border rounded flex justify-center items-center relative">
+                    <img src={image} alt="image" className="w-full h-full" />
+                  </div>
+                );
+              })}
+              <div className="w-[150px] h-[150px] p-[10px] border rounded relative">
+                <input
+                  multiple
+                  type="file"
+                  className="absolute w-full h-full opacity-0 left-0 top-0 cursor-pointer"
+                  onChange={handleImageChange}
+                />
+                <div className="w-full h-full flex justify-center items-center flex-col pointer-events-none">
+                  <FaRegImages className="text-[50px] opacity-10" />
+                  <h5 className="text-lg font-semibold opacity-20">
+                    Upload Image
+                  </h5>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div className="flex gap-5 justify-center w-full">
@@ -218,9 +241,6 @@ const page = () => {
             Reset
           </button>
         </div>
-        {/* {
-              JSON.stringify(product)
-            } */}
       </form>
     </Wrapper>
   );

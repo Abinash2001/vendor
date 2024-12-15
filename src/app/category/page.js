@@ -37,7 +37,7 @@ function page() {
 
   const handleRemoveACategory = async (id) => {
     try {
-      console.log(id);
+      // console.log(id);
       const result = await removeCategory(id);
       if (result) {
         const updatedCategories = categories.filter((item) => item._id !== id);
