@@ -8,7 +8,7 @@ const data = [
     { id: 3, name: "Category", url:"/category" },
     { id: 4, name: "Order", url:"/order" },
     { id: 5, name: "Transaction", url:"transaction" },
-    { id : 6, name: "User", url:"/userDetails" },
+    { id : 6, name: "Users", url:"/userDetails" },
 ];
 
 const subMenuData=[

@@ -3,15 +3,18 @@ import React, { useState, useEffect } from "react";
 import Wrapper from "./Wrapper";
 import { AiOutlineMore, AiOutlineShoppingCart } from "react-icons/ai";
 import { getProduct } from '../services/productService';
+import { getOrders } from '../services/orderService';
 
 export const Card = () => {
   const [totalProducts, setTotalProducts] = useState([]);
+  const [totalOrders, setTotalOrders] = useState([]);
   useEffect(() => {
     const fetchTotalProducts = async () => {
       try {
         const products=await getProduct();
-        // console.log(products.length);
         setTotalProducts(products.length);
+        const orders=await getOrders();
+        setTotalOrders(orders.length);
       } catch (error) {
         console.log(error);
         console.log("error on getTotalProduct function call");
@@ -40,8 +43,8 @@ export const Card = () => {
         </div>
         <div className="bg-white rounded p-6 flex flex-col gap-5">
           <div className="flex items-center ">
-            <p className="font-bold text-lg">Sales</p>
-            <p className="text-black/[0.5] text-sm font-semibold">| Today</p>
+            <p className="font-bold text-lg">Total Orders</p>
+            {/* <p className="text-black/[0.5] text-sm font-semibold">| Today</p> */}
             <AiOutlineMore
               size={20}
               className="ml-auto text-base font-medium cursor-pointer"
@@ -52,8 +55,8 @@ export const Card = () => {
               <AiOutlineShoppingCart size={45} className="text-blue-600" />
             </div>
             <div>
-              <p className="text-4xl md:text-5xl font-bold">145</p>
-              <p className="text-black/[0.5]">12% increase</p>
+              <p className="text-4xl md:text-5xl font-bold">{totalOrders}</p>
+              {/* <p className="text-black/[0.5]">12% increase</p> */}
             </div>
           </div>
         </div>

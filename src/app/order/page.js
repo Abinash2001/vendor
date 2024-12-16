@@ -13,7 +13,7 @@ import { getOrders } from "../services/orderService";
 
 const page = async () => {
   const orders = await getOrders();
-  console.log("orders", orders);
+  // console.log("orders", orders);
   return (
     <Wrapper>
       <div className="bg-white my-5 p-5 rounded">

@@ -5,7 +5,7 @@ import connectMongoDB from "@/app/libs/mongodb";
 connectMongoDB();
 
 export async function GET(request){
-    const products = await Product.find().populate("category");
+    const products = await Product.find();//.populate("category");
     return NextResponse.json(products,{
         status: 200,
     });
