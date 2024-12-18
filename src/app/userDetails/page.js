@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Wrapper from "../components/Wrapper";
 import {
   Table,
@@ -16,9 +16,14 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import Link from "next/link";
 
-const page = async() => {
-  const users = await getUsers();
-  console.log(users);
+const page = () => {
+  const [users, setUsers] = React.useState([]);
+  useEffect(() => {
+    getUsers().then((data) => {
+      setUsers(data);
+    });
+  }, []);
+  // console.log(users);
   return (
     <Wrapper>
       <div className="bg-white my-5 p-5 rounded">
@@ -30,11 +35,12 @@ const page = async() => {
           >
             <TableHeader>
               {/* <TableColumn className='font-bold'>User Id</TableColumn> */}
-              <TableColumn className="font-bold">S.No</TableColumn>
-              <TableColumn className="font-bold">Name</TableColumn>
-              <TableColumn className="font-bold">Email</TableColumn>
+              <TableColumn className="font-bold text-center">S.No</TableColumn>
+              <TableColumn className="font-bold text-center">Name</TableColumn>
+              <TableColumn className="font-bold text-center">Email</TableColumn>
+              <TableColumn className="font-bold text-center">Create On</TableColumn>
               {/* <TableColumn className="font-bold">Number</TableColumn> */}
-              <TableColumn className="font-bold">Action</TableColumn>
+              <TableColumn className="font-bold text-center">Action</TableColumn>
             </TableHeader>
             <TableBody>
               {users.length > 0 &&  (
@@ -43,6 +49,7 @@ const page = async() => {
                   <TableCell className="text-gray-400">{index + 1}</TableCell>
                   <TableCell>{user?.username}</TableCell>
                   <TableCell>{user?.email}</TableCell>
+                  <TableCell>{new Date(user?.createdAt).toLocaleString()}</TableCell>
                   {/* <TableCell>801300000</TableCell> */}
                   <TableCell className="flex gap-2 justify-center">
                     <Link href={`/userDetails/${user?._id}`} className="px-2 py-1 rounded">

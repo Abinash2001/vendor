@@ -4,8 +4,8 @@ import User from "@/app/models/userDB";
 
 connectMongoDB();
 
-export async function GET(request) {
-  const users = await User.find({},{password: 0});
+export async function GET(request,{params}) {
+  const users = await User.findById(params.id, { password: 0 });
   return NextResponse.json(users, {
     status: 200,
   });

@@ -6,3 +6,10 @@ export async function getUsers() {
     // console.log("result from getUser function call");
     return result;
 }
+
+export async function getUserById(id) {
+    const result = await httpAxios.get(`/api/user/${id}`).then(response => response.data);
+    // console.log(result);
+    // console.log("result from getUser function call");
+    return result;
+}
