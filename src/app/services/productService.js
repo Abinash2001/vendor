@@ -15,9 +15,17 @@ export async function getProduct(){
     return result;
 }
 export async function getProductById(productId){
-    // console.log(productId);
+    // console.log("product servce: ",productId);
     const result = await httpAxios.get(`/api/product/${productId}`).then(response=>response.data);
     // console.log(result);
     // console.log("result from getProductById function call");
+    return result;
+}
+
+export async function updateProduct(productId,product){
+    console.log("productService",product);
+    const result = await httpAxios.put(`/api/product/${productId}`,product).then(response=>response.data);
+    // console.log(result);
+    // console.log("result from updateProduct function call put");
     return result;
 }

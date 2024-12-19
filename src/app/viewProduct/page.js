@@ -56,14 +56,14 @@ useEffect(()=>{
               {/* <div> */}
                 <Table aria-label="Example static collection table" className=' overflow-x-auto'>
                   <TableHeader>
-                    <TableColumn className='font-bold'>Product Name</TableColumn>
-                    <TableColumn className='font-bold'>Original Price</TableColumn>
-                    <TableColumn className='font-bold'>Discounted Price</TableColumn>
-                    <TableColumn className='font-bold'>Quantity</TableColumn>
+                    <TableColumn className='font-bold text-center'>Product Name</TableColumn>
+                    <TableColumn className='font-bold text-center'>Original Price</TableColumn>
+                    <TableColumn className='font-bold text-center'>Discounted Price</TableColumn>
+                    <TableColumn className='font-bold text-center'>Quantity</TableColumn>
                     <TableColumn className='font-bold'>Category</TableColumn>
                     {/* <TableColumn className='font-bold'>Sold</TableColumn>
                     <TableColumn className='font-bold'>Revenue</TableColumn> */}
-                    <TableColumn className='font-bold'>Details</TableColumn>
+                    <TableColumn className='font-bold text-center'>Details</TableColumn>
                   </TableHeader>
                   <TableBody>
                     {
@@ -76,7 +76,7 @@ useEffect(()=>{
                             <TableCell>{product.stock_available}</TableCell>
                             <TableCell>{product.category?.name}</TableCell>
                             {/* <TableCell>{product.revenue}</TableCell> */}
-                            <TableCell><Link href={`/productDetail/${product._id}`} className='bg-blue-500 hover:bg-blue-600 py-0 px-2 rounded font-semibold text-white outline-none'>click</Link></TableCell>
+                            <TableCell><Link href={`/productDetail/${product._id}`} className='bg-blue-500 hover:bg-blue-600 py-1 px-2 rounded font-semibold text-white outline-none'>click</Link></TableCell>
                           </TableRow>
                         )
                       })

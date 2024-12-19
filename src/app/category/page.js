@@ -98,8 +98,8 @@ function page() {
         <div className='bg-white my-5 p-5 rounded'>
             <Table aria-label="Example static collection table" className=' overflow-x-auto'>
                 <TableHeader>
-                    <TableColumn className='font-bold'>Category Name</TableColumn>
-                    <TableColumn className='font-bold'>Remove Button</TableColumn>
+                    <TableColumn className='font-bold text-center'>Category Name</TableColumn>
+                    <TableColumn className='font-bold text-center'>Remove Button</TableColumn>
                 </TableHeader>
                     <TableBody >
                         {categories.map((category, index) => (

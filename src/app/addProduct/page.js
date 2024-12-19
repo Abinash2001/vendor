@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { addProduct } from "../services/productService";
 import { getCategory } from "../services/categoryService";
 import { FaRegImages } from "react-icons/fa6";
+import { IoMdClose } from "react-icons/io";
 
 const page = () => {
   const [categories, setCategories] = useState([]);
@@ -79,6 +80,13 @@ const page = () => {
         }));
       })
       .catch((error) => console.error("Error: ", error));
+  };
+
+  const handleRemoveImage = (index) => {
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      images: prevProduct.images.filter((image, i) => i !== index),
+    }));
   };
 
   useEffect(() => {
@@ -206,13 +214,20 @@ const page = () => {
           <div className="md:flex gap-10 md:text-center mb-5 justify-between">
             <h1 className="text-[17px]">Images uploads</h1>
             <div className="flex gap-5">
-              {product?.images.map((image, index) => {
-                return (
-                  <div className="w-[150px] h-[150px] p-[10px] border rounded flex justify-center items-center relative">
-                    <img src={image} alt="image" className="w-full h-full" />
+              {product?.images.map((image, index) => (
+                <div
+                  key={index}
+                  className="w-[150px] h-[150px] p-[10px] border rounded flex justify-center items-center relative"
+                >
+                  <img src={image} alt="image" className="w-full h-full" />
+                  <div
+                    className="absolute right-2 top-2 bg-white rounded-full p-2 cursor-pointer"
+                    onClick={() => handleRemoveImage(index)}
+                  >
+                    <IoMdClose className="text-lg text-red-500" />
                   </div>
-                );
-              })}
+                </div>
+              ))}
               <div className="w-[150px] h-[150px] p-[10px] border rounded relative">
                 <input
                   multiple
