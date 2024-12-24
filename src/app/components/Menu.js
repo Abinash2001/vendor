@@ -34,7 +34,7 @@ const Menu = ({showCatMenu,setShowCatMenu}) => {
                     return (
                         <React.Fragment key={item.id}>
                         {!!item?.subMenu ? (
-                            <li className='cursor-pointer flex items-center gap-2 relative'
+                            <li className='p-[10px] cursor-pointer hover:bg-black/[0.03] flex items-center gap-2 relative'
                                 onMouseEnter={()=>setShowCatMenu(true)}
                                 onMouseLeave={()=>setShowCatMenu(false)}
                             >
@@ -55,7 +55,7 @@ const Menu = ({showCatMenu,setShowCatMenu}) => {
                                 )}
                             </li>
                         ): (
-                            <li className='cursor-pointer'>
+                            <li className='p-[10px] cursor-pointer hover:bg-black/[0.03] hover:rounded-md'>
                                 <Link href={item?.url}>
                                     {item.name}
                                 </Link>

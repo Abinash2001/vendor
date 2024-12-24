@@ -10,16 +10,17 @@ export async function getCategory(){
     return result;
 }
 
-// export async function removeCategory(id){
-//     console.log("service : ",id);
-//     const result = await httpAxios.delete(`/api/category/${id}`).then(response=>response.data);
-//     console.log("service : ",result);
-//     return result;
-// }
-
 export async function removeCategory(categoryId) {
-    // console.log("service : ", categoryId);
     const result = await httpAxios.delete(`api/category?categoryId=${encodeURIComponent(categoryId)}`).then(response => response.data);
-    // console.log("result",result);
+    return result;
+}
+
+export async function updateCategory(categoryId,data){
+    const result = await httpAxios.put(`/api/category/${categoryId}`,data).then(response=>response.data);
+    return result;
+}
+
+export async function activeInactiveCategory(categoryId,data){
+    const result = await httpAxios.put(`/api/category/${categoryId}`,data).then(response=>response.data);
     return result;
 }
