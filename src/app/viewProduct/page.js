@@ -10,10 +10,12 @@ import {
   TableCell,
 } from "@nextui-org/react";
 import { getCategory } from "../services/categoryService";
-import { getProduct } from "../services/productService";
+import { getProduct, activeInactiveProduct } from "../services/productService";
 import Link from "next/link";
 import { BiSolidEditAlt } from "react-icons/bi";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { FiCheckCircle, FiXCircle } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 const page = () => {
   const [products, setProducts] = useState([]);
@@ -33,7 +35,7 @@ const page = () => {
     const fetchProducts = async () => {
       try {
         const products = await getProduct();
-        console.log(products);
+        // console.log(products);
         setProducts(products);
       } catch (error) {
         console.log(error);
@@ -43,6 +45,26 @@ const page = () => {
     fetchCategories();
     fetchProducts();
   }, []);
+
+    const handleActiveInactive = async (id, active) => {
+      try {
+        console.log(id, active);
+        const result = await activeInactiveProduct(id, { active: !active });
+        const updatedProducts = products.map((product) =>
+          product._id === id ? result : product
+        );
+        setProducts(updatedProducts);
+        toast.success(`product ${active ? "deactivated" : "activated"} !!`, {
+          position: "bottom-right",
+        });
+      } catch (error) {
+        console.log(error);
+        console.log("error on updateProduct function call");
+        toast.error("Product not Updated !!", {
+          position: "bottom-right",
+        });
+      }
+    };
 
   return (
     <Wrapper>
@@ -92,21 +114,53 @@ const page = () => {
               {products.map((product, index) => {
                 return (
                   <TableRow key={index} className="border-b">
-                    <TableCell className="text-[12px] font-medium">{product.product_name}</TableCell>
-                    <TableCell className="text-[12px] font-medium">{product.original_price}</TableCell>
-                    <TableCell className="text-[12px] font-medium">{product.discounted_price}</TableCell>
-                    <TableCell className="text-[12px] font-medium">{product.stock_available}</TableCell>
-                    <TableCell className="text-[12px] font-medium">{product.category?.name}</TableCell>
+                    <TableCell className="text-[12px] font-medium">
+                      {product.product_name}
+                    </TableCell>
+                    <TableCell className="text-[12px] font-medium">
+                      {product.original_price}
+                    </TableCell>
+                    <TableCell className="text-[12px] font-medium">
+                      {product.discounted_price}
+                    </TableCell>
+                    <TableCell className="text-[12px] font-medium">
+                      {product.stock_available}
+                    </TableCell>
+                    <TableCell className="text-[12px] font-medium">
+                      {product.category?.name}
+                    </TableCell>
                     {/* <TableCell>{product.revenue}</TableCell> */}
                     <TableCell className="flex justify-center">
-                      <Link href={`/productDetail/${product._id}`} className="px-2 py-1 rounded hover:bg-slate-200">
+                      <Link
+                        href={`/productDetail/${product._id}`}
+                        className="px-2 py-1 rounded hover:bg-slate-200"
+                      >
                         <BiSolidEditAlt
                           size={20}
                           className="text-green-500 cursor-pointer"
                         />
                       </Link>
                       <button className="px-2 py-1 rounded hover:bg-slate-200">
-                        <RiDeleteBinLine size={20} className="text-red-500 cursor-pointer" />
+                        <RiDeleteBinLine
+                          size={20}
+                          className="text-red-500 cursor-pointer"
+                        />
+                      </button>
+                      <button
+                        className="px-2 py-1 rounded hover:bg-slate-200"
+                        onClick={() =>
+                          handleActiveInactive(product._id, product.active)
+                        }
+                      >
+                        {product.active ? (
+                          
+                          <FiCheckCircle
+                            size={20}
+                            className="text-green-500 mr-1"
+                          />
+                        ) : (
+                          <FiXCircle size={20} className="text-red-500 mr-1" />
+                        )}
                       </button>
                     </TableCell>
                   </TableRow>

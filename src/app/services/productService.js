@@ -29,3 +29,8 @@ export async function updateProduct(productId,product){
     // console.log("result from updateProduct function call put");
     return result;
 }
+
+export async function activeInactiveProduct(productId,data){
+    const result = await httpAxios.put(`/api/product/${productId}`,data).then(response=>response.data);
+    return result;
+}
