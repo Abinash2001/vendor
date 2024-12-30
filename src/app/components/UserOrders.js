@@ -5,6 +5,10 @@ import { MdOutlineRemoveRedEye } from "react-icons/md";
 
 export default async function UserOrders({ userId }) {
   const orders = await getOrdersByUserId(userId);
+  // console.log("orderUser",orders);
+  // const orderLength = orders.length;
+  // console.log("order length",orders.length);
+  // console.log("abinash")
   return (
     <div className="bg-white p-5 rounded">
       <div className="flex justify-between">
@@ -49,8 +53,8 @@ export default async function UserOrders({ userId }) {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {orders.map((order) => (
-          <tr>
+          {orders.length > 0 ? (orders.map((order) => (
+          <tr key={order?._id}>
             <td className="px-4 py-4 text-xs md:text-sm font-medium text-gray-700 whitespace-nowrap">
               <div className="inline-flex items-center gap-x-3">
                 <span>#{order?._id}</span>
@@ -110,7 +114,28 @@ export default async function UserOrders({ userId }) {
               </div>
             </td>
           </tr>
-          ))}
+          ))
+        ) : (
+          <tr>
+            <td className="px-4 py-4 text-xs md:text-sm text-gray-500 whitespace-nowrap" colSpan={6}>
+              <div className="flex items-center justify-center">
+                <h2 className="text-xl md:text-2xl font-light text-gray-500">
+                  No orders found
+                </h2>
+              </div>
+            </td>
+          </tr>
+        )}
+          
+            {/* <tr>
+              <td className="px-4 py-4 text-xs md:text-sm text-gray-500 whitespace-nowrap" colSpan={6}>
+                <div className="flex items-center justify-center">
+                  <h2 className="text-xl md:text-2xl font-light text-gray-500">
+                    No orders found
+                  </h2>
+                </div>
+              </td>
+            </tr> */}
         </tbody>
       </table>
     </div>

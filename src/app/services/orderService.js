@@ -6,13 +6,14 @@ export async function getOrders() {
 }
 
 export async function getOrdersByUserId(userId) {
-    console.log("userId service",userId);
+    // console.log("userId service",userId);
     const result = await httpAxios.get(`/api/userOrder?userId=${encodeURIComponent(userId)}`).then(response => response.data);
+    // console.log("order service",result);
     return result;
 }
 
 export async function getOrderById(orderId) {
     const result = await httpAxios.get(`/api/order/${orderId}`).then(response => response.data);
-    console.log("order service",result);
+    // console.log("order service",result);
     return result;
 }

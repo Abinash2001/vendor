@@ -6,7 +6,8 @@ connectMongoDB();
 
 export async function GET(request, { params }) {
     const { id } = params;
-    const order = await Order.findById(id)//.populate({path: "userId", model: User});
+    const order = await Order.findById(id).populate("userId");
+    // console.log("abinash",order);
     return NextResponse.json(order, {
         status: 200,
     });

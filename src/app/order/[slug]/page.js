@@ -45,10 +45,10 @@ export default async function page({ params }) {
         <div className="mt-5">
           <p className="text-[18px] font-semibold">User details</p>
           <p className="text-[15px] text-gray-500">
-            Name: abinash{/*{order?.user?.name}*/}
+            Name: {order?.userId?.username}
           </p>
           <p className="text-[15px] text-gray-500">
-            Email: abinash{/*order?.user?.email*/}
+            Email: {order?.userId?.email}
           </p>
           <p className="text-[15px] text-gray-500">
             Phone: {order?.phone}
