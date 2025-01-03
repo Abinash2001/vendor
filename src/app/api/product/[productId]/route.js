@@ -19,10 +19,10 @@ export async function GET(request,{params}){
 
 export async function PUT(request,{params}){
     // console.log("params",params);
-    const {product_name,product_description,original_price,discounted_price,stock_available,category,images,active} = await request.json();
+    const {product_name,product_slug,product_description,original_price,discounted_price,stock_available,category,size,color,images,active} = await request.json();
     // console.log("product route: ",product_name,product_description,original_price,discounted_price,stock_available,category,active);
     
-    const product = await Product.findByIdAndUpdate(params.productId,{product_name,product_description,original_price,discounted_price,stock_available,category,images,active},{new:true});
+    const product = await Product.findByIdAndUpdate(params.productId,{product_name,product_slug,product_description,original_price,discounted_price,stock_available,category,size,color,images,active},{new:true});
     // console.log("update product",product);
     return NextResponse.json(product);
 }

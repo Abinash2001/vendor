@@ -23,7 +23,7 @@ export async function getProductById(productId){
 }
 
 export async function updateProduct(productId,product){
-    console.log("productService",product);
+    // console.log("productService",product);
     const result = await httpAxios.put(`/api/product/${productId}`,product).then(response=>response.data);
     // console.log(result);
     // console.log("result from updateProduct function call put");
