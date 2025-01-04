@@ -67,7 +67,7 @@ const page = () => {
         return;
       }
       const result = await addProduct(product);
-      console.log("product add result", result);
+      // console.log("product add result", result);
       toast.success("Product added", {
         position: "bottom-right",
       });

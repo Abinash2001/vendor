@@ -20,7 +20,7 @@ const page = ({ params }) => {
         const product = await getProductById(params.slug);
         setProducts(product);
         setState(product);
-        console.log(product);
+        // console.log(product);
       } catch (error) {
         console.log(error);
         console.log("error on getProduct function call");
@@ -29,7 +29,7 @@ const page = ({ params }) => {
     fetchProductDetails();
   }, []);
 
-  console.log("color", products?.color);
+  // console.log("color", products?.color);
 
   const handleRemoveImage = (index) => {
     const updatedImages = products.images.filter((image, i) => i !== index);
@@ -83,7 +83,7 @@ const page = ({ params }) => {
     };
 
     try {
-      const result = await updateProduct(params.slug,product);
+      const result = await updateProduct(params.slug, product);
       toast.success("Product updated", {
         position: "bottom-right",
       });
@@ -101,6 +101,22 @@ const page = ({ params }) => {
       <form className="bg-white my-5 p-5 rounded" onSubmit={handleAddProduct}>
         <h1 className="text-[30px] font-semibold mb-5">Product Detail</h1>
         <div>
+          <div className="md:flex gap-10 md:text-center mb-5 justify-between">
+            <label htmlFor="product category" className="text-[16px]">
+              Category
+            </label>
+            <select
+              disabled
+              className="border w-full lg:w-[80%] md:w-[70%] rounded p-[8px] mt-2 md:mt-0 outline-blue-400"
+              name="category"
+              // onChange={handleChange}
+            >
+              <option>{products?.category?.name}</option>
+              {/* <option>Select Category</option>
+              <option selected>abi</option>
+              <option>abi</option> */}
+            </select>
+          </div>
           <div className="md:flex gap-10 md:text-center mb-5 justify-between">
             <label htmlFor="product name" className="text-[16px]">
               Name
@@ -173,20 +189,6 @@ const page = ({ params }) => {
               className="border w-full lg:w-[80%] md:w-[70%] rounded p-[8px] mt-2 md:mt-0 outline-blue-400"
             />
           </div>
-          <div className="md:flex gap-10 md:text-center mb-5 justify-between">
-            <label htmlFor="product category" className="text-[16px]">
-              Category
-            </label>
-            <select
-              className="border w-full lg:w-[80%] md:w-[70%] rounded p-[8px] mt-2 md:mt-0 outline-blue-400"
-              name="category"
-              onChange={handleChange}
-            >
-              <option>Select Category</option>
-              <option>abi</option>
-              <option>abi</option>
-            </select>
-          </div>
           <div className="md:flex gap-10 mb-5 justify-between">
             <label htmlFor="size" className="text-[16px]">
               Size
@@ -194,10 +196,12 @@ const page = ({ params }) => {
             <Select
               isMulti={true}
               className="w-full lg:w-[80%] md:w-[70%] rounded mt-2 md:mt-0 outline-blue-400"
-              value={products.size?.map((size) => ({
-                value: size,
-                label: size, // Capitalize the size label
-              })) || []}
+              value={
+                products.size?.map((size) => ({
+                  value: size,
+                  label: size, // Capitalize the size label
+                })) || []
+              }
               onChange={(event) => {
                 setProducts({
                   ...products,
@@ -240,29 +244,30 @@ const page = ({ params }) => {
                 </div>
               </div>
               <div className="w-full gap-2">
-                {Array.isArray(products?.color) && products.color.map((color, index) => (
-                  <div
-                    key={index}
-                    className="w-[70px] flex items-center gap-2 border p-2 relative rounded"
-                  >
+                {Array.isArray(products?.color) &&
+                  products.color.map((color, index) => (
                     <div
-                      className="w-[20px] h-[20px] rounded-full"
-                      style={{ backgroundColor: color }}
-                    ></div>
-                    {/* <div
+                      key={index}
+                      className="w-[70px] flex items-center gap-2 border p-2 relative rounded"
+                    >
+                      <div
+                        className="w-[20px] h-[20px] rounded-full"
+                        style={{ backgroundColor: color }}
+                      ></div>
+                      {/* <div
                       className="bg-red-500 text-white px-4 py-2 rounded cursor-pointer"
                       onClick={() => handleRemoveColor(index)}
                     >
                       Remove
                     </div> */}
-                    <div
-                      className="absolute right-2 top-2 bg-white rounded-full px-0 py-0 cursor-pointer"
-                      onClick={() => handleRemoveColor(index)}
-                    >
-                      <IoMdClose className="text-lg text-red-500" />
+                      <div
+                        className="absolute right-2 top-2 bg-white rounded-full px-0 py-0 cursor-pointer"
+                        onClick={() => handleRemoveColor(index)}
+                      >
+                        <IoMdClose className="text-lg text-red-500" />
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           </div>
@@ -316,4 +321,3 @@ const page = ({ params }) => {
 };
 
 export default page;
-

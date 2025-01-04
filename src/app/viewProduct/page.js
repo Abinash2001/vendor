@@ -48,7 +48,7 @@ const page = () => {
 
     const handleActiveInactive = async (id, active) => {
       try {
-        console.log(id, active);
+        // console.log(id, active);
         const result = await activeInactiveProduct(id, { active: !active });
         const updatedProducts = products.map((product) =>
           product._id === id ? result : product
@@ -103,7 +103,7 @@ const page = () => {
               <TableColumn className="font-bold text-center">
                 Quantity
               </TableColumn>
-              <TableColumn className="font-bold">Category</TableColumn>
+              <TableColumn className="font-bold text-center">Category</TableColumn>
               {/* <TableColumn className='font-bold'>Sold</TableColumn>
                     <TableColumn className='font-bold'>Revenue</TableColumn> */}
               <TableColumn className="font-bold text-center">

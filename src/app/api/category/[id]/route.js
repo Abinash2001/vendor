@@ -12,7 +12,7 @@ export async function PUT(request, { params }) {
     { name, active },
     { new: true }
   );
-  console.log("updateCategory", updateCategory);
+  // console.log("updateCategory", updateCategory);
   return NextResponse.json(updateCategory, {
     status: 200,
   });

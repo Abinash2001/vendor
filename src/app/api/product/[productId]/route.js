@@ -9,8 +9,8 @@ export async function GET(request,{params}){
     // console.log(params.product);
     // const {productId} = params.product;
     // console.log(productId+'abinash');
-    const product = await Product.findById(params.productId);
-    // console.log(params);
+    const product = await Product.findById(params.productId).populate("category");
+    // console.log("Abinash",product);
     // console.log("params");
     return NextResponse.json(product,{
         status: 200,
