@@ -17,9 +17,31 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { FiCheckCircle, FiXCircle } from "react-icons/fi";
 import { toast } from "react-toastify";
 
-const page = () => {
+const page = ({searchParams}) => {
+  // console.log("searchParams.page",page);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
+  
+  //add pagination start here
+  let page = parseInt(searchParams.page,10);   //?page= 4.1 then page = 4 or 4.9 then page = 4
+  page = isNaN(page) || page < 1 ? 1 : page;  //if page is not a number then page = 1
+  const perPage = 5;
+  // const totalPages = Math.ceil( 10 / perPage);
+  // let totalPages;
+  const prevPage = page - 1 > 0 ? page - 1 : 1;
+  const nextPage = page + 1;
+
+  const pageNumber = []
+  const offsetNumber = 3;
+  for (let i = page - offsetNumber; i <= page + offsetNumber; i++) {
+    if (i > 0 && i <= totalPages) {
+      pageNumber.push(i);
+    }
+  }
+  //add pagination end here
 
   // fetch categories from the database and set the state of categories to show the dropdown
   useEffect(() => {
@@ -34,9 +56,17 @@ const page = () => {
     };
     const fetchProducts = async () => {
       try {
-        const products = await getProduct();
+        const data = await getProduct(perPage,page); //perPage and page for pagination
+        const products = data.products;
+        // console.log("data.totalProductLength",data.totalProductLength);
+        //pagination start here
+        setTotalPages(Math.ceil( data.totalProductLength / perPage));
+        // totalPages = Math.ceil( data.totalProductLength / perPage);
+        // console.log("totalPages",totalPages);
+        //pagination end here
         // console.log(products);
         setProducts(products);
+        setFilteredProducts(products);
       } catch (error) {
         console.log(error);
         console.log("error on getProduct function call");
@@ -44,7 +74,22 @@ const page = () => {
     };
     fetchCategories();
     fetchProducts();
-  }, []);
+  }, [page]);
+
+  // console.log("abinash",totalPages);
+  const handleCategoryChange = (e) => {
+    const categoryId = e.target.value;
+    setSelectedCategory(categoryId);   
+    
+    if (categoryId) {
+      const filtered = products.filter(
+        (product) => product.category?._id === categoryId
+      );
+      setFilteredProducts(filtered);
+    } else {
+      setFilteredProducts(products); // Show all products if no category is selected
+    }
+  };
 
     const handleActiveInactive = async (id, active) => {
       try {
@@ -54,6 +99,9 @@ const page = () => {
           product._id === id ? result : product
         );
         setProducts(updatedProducts);
+        setFilteredProducts(updatedProducts.filter(
+          (product) => !selectedCategory || product.category?._id === selectedCategory
+        ));
         toast.success(`product ${active ? "deactivated" : "activated"} !!`, {
           position: "bottom-right",
         });
@@ -70,12 +118,17 @@ const page = () => {
     <Wrapper>
       <div className="bg-white my-5 p-5 rounded">
         <h1 className="text-[30px] font-semibold mb-5">
-          View Total Product Details
+          View Product
         </h1>
         <div className=" md:text-center bg-white my-10 justify-between">
           <label className="text-[16px] mr-10">Product Category</label>
-          <select className="border w-full lg:w-[80%] md:w-[70%] rounded p-[8px] mt-2 md:mt-0 mb-10 outline-blue-400">
-            <option value={null}>Select Category</option>
+          <select 
+          className="border w-full lg:w-[80%] md:w-[70%] rounded p-[8px] mt-2 md:mt-0 mb-10 outline-blue-400"
+          onChange={handleCategoryChange}
+          value={selectedCategory || ""}
+          >
+            {/* <option value="">Select Category</option> */}
+            <option value="">All Categories</option>
             {categories.map((category) => {
               return (
                 <option key={category._id} value={category._id}>
@@ -90,7 +143,7 @@ const page = () => {
             aria-label="Example static collection table"
             className=" overflow-x-auto"
           >
-            <TableHeader>
+            <TableHeader className="bg-gray-50">
               <TableColumn className="font-bold text-center">
                 Product Name
               </TableColumn>
@@ -111,7 +164,7 @@ const page = () => {
               </TableColumn>
             </TableHeader>
             <TableBody>
-              {products.map((product, index) => {
+              {filteredProducts.map((product, index) => {
                 return (
                   <TableRow key={index} className="border-b">
                     <TableCell className="text-[12px] font-medium">
@@ -169,6 +222,41 @@ const page = () => {
             </TableBody>
           </Table>
         </div>
+      </div>
+      <div className="flex justify-center">
+        <div className="flex w-1/2 justify-between">
+      {
+        //pagination start here
+        page === 1 ? (
+          <div className="opacity-50 cursor-not-allowed p-2">Previous</div>
+        ) : (
+          <Link href={`?page=${prevPage}`}>
+            <div className="cursor-pointer p-2">Previous</div>
+          </Link>
+        )
+      }
+      <div className="flex gap-2">
+  {
+    pageNumber.map((number) => (
+      <Link key={number} href={`?page=${number}`}>
+        <div className={`cursor-pointer ${page === number ? "bg-white p-2 rounded" : "p-2"}`}>
+          {number}
+        </div>
+      </Link>
+    ))
+  }
+  </div>
+      {
+         page === totalPages ? (
+          <div className="opacity-50 cursor-not-allowed p-2">Next</div>
+        ) : (
+          <Link href={`?page=${nextPage}`}>
+            <div className="cursor-pointer p-2">Next</div>
+          </Link>
+        )
+        //pagination end here
+      }
+      </div>
       </div>
     </Wrapper>
   );

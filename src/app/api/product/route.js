@@ -4,10 +4,19 @@ import connectMongoDB from "@/app/libs/mongodb";
 
 connectMongoDB();
 
-export async function GET(request){
-    const products = await Product.find().populate("category");
-    // console.log("products route :",products);
-    return NextResponse.json(products,{
+export async function GET(request, params){
+    
+    const { searchParams } = new URL(request.url);
+    const perPage = searchParams.get("perPage");
+    const page = searchParams.get("page");
+    // console.log("page: ",page);
+    // // console.log("request: ",request.json());
+    // // const {perPage} = await request.json();
+    // console.log("perPage: ",perPage);
+    const products = await Product.find().populate("category").limit(parseInt(perPage)).skip(parseInt(perPage) * (parseInt(page)-1));
+    const totalProductLength = await Product.find().countDocuments();
+
+    return NextResponse.json({products,totalProductLength},{
         status: 200,
     });
 }

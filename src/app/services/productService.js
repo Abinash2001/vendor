@@ -8,8 +8,8 @@ export async function addProduct(product){
     return result;
 }
 
-export async function getProduct(){
-    const result = await httpAxios.get("/api/product").then(response=>response.data);
+export async function getProduct(perPage,page){
+    const result = await httpAxios.get(`/api/product?perPage=${perPage}&page=${page}`).then(response=>response.data);
     // console.log(result);
     // console.log("result from getProduct function call");
     return result;
