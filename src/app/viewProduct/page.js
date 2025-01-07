@@ -16,31 +16,30 @@ import { BiSolidEditAlt } from "react-icons/bi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { FiCheckCircle, FiXCircle } from "react-icons/fi";
 import { toast } from "react-toastify";
+import Pagination from "../components/Pagination";
 
-const page = ({searchParams}) => {
+const page = ({ searchParams }) => {
   // console.log("searchParams.page",page);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
-  
-  //add pagination start here
-  let page = parseInt(searchParams.page,10);   //?page= 4.1 then page = 4 or 4.9 then page = 4
-  page = isNaN(page) || page < 1 ? 1 : page;  //if page is not a number then page = 1
-  const perPage = 5;
-  // const totalPages = Math.ceil( 10 / perPage);
-  // let totalPages;
-  const prevPage = page - 1 > 0 ? page - 1 : 1;
-  const nextPage = page + 1;
 
-  const pageNumber = []
-  const offsetNumber = 3;
-  for (let i = page - offsetNumber; i <= page + offsetNumber; i++) {
-    if (i > 0 && i <= totalPages) {
-      pageNumber.push(i);
-    }
-  }
+  //add pagination start here
+  let page = parseInt(searchParams.page, 10); //?page= 4.1 then page = 4 or 4.9 then page = 4
+  page = isNaN(page) || page < 1 ? 1 : page; //if page is not a number then page = 1
+  const perPage = 10; //items per page
+  // const prevPage = page - 1 > 0 ? page - 1 : 1;
+  // const nextPage = page + 1;
+
+  // const pageNumber = [];
+  // const offsetNumber = 3;
+  // for (let i = page - offsetNumber; i <= page + offsetNumber; i++) {
+  //   if (i > 0 && i <= totalPages) {
+  //     pageNumber.push(i);
+  //   }
+  // }
   //add pagination end here
 
   // fetch categories from the database and set the state of categories to show the dropdown
@@ -56,15 +55,12 @@ const page = ({searchParams}) => {
     };
     const fetchProducts = async () => {
       try {
-        const data = await getProduct(perPage,page); //perPage and page for pagination
+        const data = await getProduct(perPage, page, selectedCategory); //perPage and page for pagination
         const products = data.products;
-        // console.log("data.totalProductLength",data.totalProductLength);
         //pagination start here
-        setTotalPages(Math.ceil( data.totalProductLength / perPage));
+        setTotalPages(Math.ceil(data.totalProductLength / perPage));
         // totalPages = Math.ceil( data.totalProductLength / perPage);
-        // console.log("totalPages",totalPages);
         //pagination end here
-        // console.log(products);
         setProducts(products);
         setFilteredProducts(products);
       } catch (error) {
@@ -74,58 +70,59 @@ const page = ({searchParams}) => {
     };
     fetchCategories();
     fetchProducts();
-  }, [page]);
+  }, [page, selectedCategory]);
 
-  // console.log("abinash",totalPages);
+  //-----------------------------------filter product by category-----------------------------------
   const handleCategoryChange = (e) => {
     const categoryId = e.target.value;
-    setSelectedCategory(categoryId);   
-    
-    if (categoryId) {
-      const filtered = products.filter(
-        (product) => product.category?._id === categoryId
+    setSelectedCategory(categoryId);
+
+    // if (categoryId) {
+    //   const filtered = products.filter(
+    //     (product) => product.category?._id === categoryId
+    //   );
+    //   setFilteredProducts(filtered);
+    // } else {
+    //   setFilteredProducts(products); // Show all products if no category is selected
+    // }
+  };
+  //-----------------------------------filter product by category-----------------------------------
+
+  const handleActiveInactive = async (id, active) => {
+    try {
+      const result = await activeInactiveProduct(id, { active: !active });
+      const updatedProducts = products.map((product) =>
+        product._id === id ? result : product
       );
-      setFilteredProducts(filtered);
-    } else {
-      setFilteredProducts(products); // Show all products if no category is selected
+      setProducts(updatedProducts);
+      setFilteredProducts(
+        updatedProducts.filter(
+          (product) =>
+            !selectedCategory || product.category?._id === selectedCategory
+        )
+      );
+      toast.success(`product ${active ? "deactivated" : "activated"} !!`, {
+        position: "bottom-right",
+      });
+    } catch (error) {
+      console.log(error);
+      console.log("error on updateProduct function call");
+      toast.error("Product not Updated !!", {
+        position: "bottom-right",
+      });
     }
   };
-
-    const handleActiveInactive = async (id, active) => {
-      try {
-        // console.log(id, active);
-        const result = await activeInactiveProduct(id, { active: !active });
-        const updatedProducts = products.map((product) =>
-          product._id === id ? result : product
-        );
-        setProducts(updatedProducts);
-        setFilteredProducts(updatedProducts.filter(
-          (product) => !selectedCategory || product.category?._id === selectedCategory
-        ));
-        toast.success(`product ${active ? "deactivated" : "activated"} !!`, {
-          position: "bottom-right",
-        });
-      } catch (error) {
-        console.log(error);
-        console.log("error on updateProduct function call");
-        toast.error("Product not Updated !!", {
-          position: "bottom-right",
-        });
-      }
-    };
 
   return (
     <Wrapper>
       <div className="bg-white my-5 p-5 rounded">
-        <h1 className="text-[30px] font-semibold mb-5">
-          View Product
-        </h1>
+        <h1 className="text-[30px] font-semibold mb-5">View Product</h1>
         <div className=" md:text-center bg-white my-10 justify-between">
           <label className="text-[16px] mr-10">Product Category</label>
-          <select 
-          className="border w-full lg:w-[80%] md:w-[70%] rounded p-[8px] mt-2 md:mt-0 mb-10 outline-blue-400"
-          onChange={handleCategoryChange}
-          value={selectedCategory || ""}
+          <select
+            className="border w-full lg:w-[80%] md:w-[70%] rounded p-[8px] mt-2 md:mt-0 mb-10 outline-blue-400"
+            onChange={handleCategoryChange}
+            value={selectedCategory || ""}
           >
             {/* <option value="">Select Category</option> */}
             <option value="">All Categories</option>
@@ -156,7 +153,9 @@ const page = ({searchParams}) => {
               <TableColumn className="font-bold text-center">
                 Quantity
               </TableColumn>
-              <TableColumn className="font-bold text-center">Category</TableColumn>
+              <TableColumn className="font-bold text-center">
+                Category
+              </TableColumn>
               {/* <TableColumn className='font-bold'>Sold</TableColumn>
                     <TableColumn className='font-bold'>Revenue</TableColumn> */}
               <TableColumn className="font-bold text-center">
@@ -206,7 +205,6 @@ const page = ({searchParams}) => {
                         }
                       >
                         {product.active ? (
-                          
                           <FiCheckCircle
                             size={20}
                             className="text-green-500 mr-1"
@@ -222,42 +220,46 @@ const page = ({searchParams}) => {
             </TableBody>
           </Table>
         </div>
+        <Pagination page={page} totalPages={totalPages} />
       </div>
-      <div className="flex justify-center">
+      {/* <div className="flex justify-center">
         <div className="flex w-1/2 justify-between">
-      {
-        //pagination start here
-        page === 1 ? (
-          <div className="opacity-50 cursor-not-allowed p-2">Previous</div>
-        ) : (
-          <Link href={`?page=${prevPage}`}>
-            <div className="cursor-pointer p-2">Previous</div>
-          </Link>
-        )
-      }
-      <div className="flex gap-2">
-  {
-    pageNumber.map((number) => (
-      <Link key={number} href={`?page=${number}`}>
-        <div className={`cursor-pointer ${page === number ? "bg-white p-2 rounded" : "p-2"}`}>
-          {number}
+          {
+            //pagination start here
+            page === 1 ? (
+              <div className="opacity-50 cursor-not-allowed p-2">Previous</div>
+            ) : (
+              <Link href={`?page=${prevPage}`}>
+                <div className="cursor-pointer p-2">Previous</div>
+              </Link>
+            )
+          }
+          <div className="flex gap-2">
+            {pageNumber.map((number) => (
+              <Link key={number} href={`?page=${number}`}>
+                <div
+                  className={`cursor-pointer ${
+                    page === number ? "bg-white p-2 rounded" : "p-2"
+                  }`}
+                >
+                  {number}
+                </div>
+              </Link>
+            ))}
+          </div>
+          {
+            page === totalPages ? (
+              <div className="opacity-50 cursor-not-allowed p-2">Next</div>
+            ) : (
+              <Link href={`?page=${nextPage}`}>
+                <div className="cursor-pointer p-2">Next</div>
+              </Link>
+            )
+            //pagination end here
+          }
         </div>
-      </Link>
-    ))
-  }
-  </div>
-      {
-         page === totalPages ? (
-          <div className="opacity-50 cursor-not-allowed p-2">Next</div>
-        ) : (
-          <Link href={`?page=${nextPage}`}>
-            <div className="cursor-pointer p-2">Next</div>
-          </Link>
-        )
-        //pagination end here
-      }
-      </div>
-      </div>
+      </div> */}
+      {/* <Pagination page={page} prevPage={5} pageNumber={pageNumber} totalPages={totalPages} nextPage={nextPage}/> */}
     </Wrapper>
   );
 };

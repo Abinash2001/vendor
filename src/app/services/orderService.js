@@ -1,7 +1,8 @@
 import { httpAxios } from "../libs/axiosHelper";
 
-export async function getOrders() {
-    const result = await httpAxios.get("/api/order").then(response => response.data);
+export async function getOrders(perPage,page) {
+    const result = await httpAxios.get(`/api/order?perPage=${perPage}&page=${page}`).then(response => response.data);
+    console.log("order service",result);
     return result;
 }
 

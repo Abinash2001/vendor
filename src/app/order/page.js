@@ -12,9 +12,19 @@ import Wrapper from "../components/Wrapper";
 import { getOrders } from "../services/orderService";
 import Link from "next/link";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
+import Pagination from "../components/Pagination";
 
-const page =async () => {
-  const orders = await getOrders();
+const page = async ({ searchParams }) => {
+  //pagination start here
+  let page = parseInt(searchParams.page, 10); //?page= 4.1 then page = 4 or 4.9 then page = 4
+  page = isNaN(page) || page < 1 ? 1 : page; //if page is not a number then page = 1
+  const perPage = 10; //items per page
+  //pagination end here
+
+  const data = await getOrders(perPage, page);
+  const orders = data.orders;
+  const totalPages = Math.ceil(data.totalOrdersLength / perPage);
+
   // const [orders, setOrders] = useState([]);
 
   // useEffect(() => {
@@ -34,7 +44,7 @@ const page =async () => {
                 </select> */}
           {/* </div> */}
           {/* <div> */}
-          <div >
+          <div>
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -96,7 +106,7 @@ const page =async () => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {orders.map((order) => (
-                  <tr>
+                  <tr key={order._id}>
                     <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
                       <div className="inline-flex items-center gap-x-3">
                         <span>#{order?._id}</span>
@@ -112,11 +122,11 @@ const page =async () => {
                         <span>Abinash</span>
                       </div>
                     </td>
-                      <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
-                        <div className="inline-flex items-center gap-x-3">
-                          <span>{order?.phone}</span>
-                        </div>
-                      </td>
+                    <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
+                      <div className="inline-flex items-center gap-x-3">
+                        <span>{order?.phone}</span>
+                      </div>
+                    </td>
                     <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
                       <div className="inline-flex items-center gap-x-3">
                         <span>{order?.amount}</span>
@@ -145,10 +155,10 @@ const page =async () => {
                       </div>
                     </td>
                     <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
-                        <div className="inline-flex items-center gap-x-3">
-                          <span>Online</span>
-                        </div>
-                      </td>
+                      <div className="inline-flex items-center gap-x-3">
+                        <span>Online</span>
+                      </div>
+                    </td>
                     <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
                       <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60">
                         <svg
@@ -166,13 +176,11 @@ const page =async () => {
                             stroke-linejoin="round"
                           />
                         </svg>
-                        <h2 className="text-[12px] font-normal">
-                          Delivered
-                        </h2>
+                        <h2 className="text-[12px] font-normal">Delivered</h2>
                       </div>
                     </td>
                     <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
-                        <div className="inline-flex items-center gap-x-3">
+                      <div className="inline-flex items-center gap-x-3">
                         <Link
                           href={`/order/${order?._id}`}
                           className="text-blue-500 transition-colors duration-200 hover:text-indigo-500 focus:outline-none"
@@ -292,6 +300,7 @@ const page =async () => {
           {/* --------------------------------------------------------------------------------------------- */}
           {/* </div> */}
         </div>
+        <Pagination page={page} totalPages={totalPages} />
       </div>
     </Wrapper>
   );
