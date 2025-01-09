@@ -16,7 +16,7 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import Link from "next/link";
 
-const page = () => {
+const UserDetails = () => {
   const [users, setUsers] = React.useState([]);
   useEffect(() => {
     getUsers().then((data) => {
@@ -71,4 +71,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default UserDetails;

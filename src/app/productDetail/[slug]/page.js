@@ -9,7 +9,7 @@ import { updateProduct } from "@/app/services/productService";
 import { toast } from "react-toastify";
 import Select from "react-select";
 
-const page = ({ params }) => {
+const ProductDetail = ({ params }) => {
   const [products, setProducts] = useState({ images: [] });
   const [state, setState] = useState({});
   const [color, setColor] = useState("");
@@ -320,4 +320,4 @@ const page = ({ params }) => {
   );
 };
 
-export default page;
+export default ProductDetail;

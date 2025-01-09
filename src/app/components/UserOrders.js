@@ -1,10 +1,22 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { getOrdersByUserId } from "../services/orderService";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 
-export default async function UserOrders({ userId }) {
-  const orders = await getOrdersByUserId(userId);
+export default function UserOrders({ userId }) {
+  const [orders, setOrders] = useState([]);
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const orders = await getOrdersByUserId(userId);
+        setOrders(orders);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    };
+    fetchOrders();
+  }, [userId]);
   // console.log("orderUser",orders);
   // const orderLength = orders.length;
   // console.log("order length",orders.length);
@@ -53,81 +65,89 @@ export default async function UserOrders({ userId }) {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {orders.length > 0 ? (orders.map((order) => (
-          <tr key={order?._id}>
-            <td className="px-4 py-4 text-xs md:text-sm font-medium text-gray-700 whitespace-nowrap">
-              <div className="inline-flex items-center gap-x-3">
-                <span>#{order?._id}</span>
-              </div>
-            </td>
-            <td className="px-4 py-4 text-xs md:text-sm text-gray-500 whitespace-nowrap">
-              {new Date(order?.createdAt).toLocaleDateString()}
-            </td>
-            <td className="px-4 py-4 text-xs md:text-sm font-medium text-gray-700 whitespace-nowrap">
-              <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60">
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 12 12"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M10 3L4.5 8.5L2 6"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-                <h2 className="text-xs md:text-sm font-normal">{order?.status}</h2>
-              </div>
-            </td>
-            <td className="px-4 py-4 text-xs md:text-sm font-medium text-gray-700 whitespace-nowrap">
-              <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60">
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 12 12"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M10 3L4.5 8.5L2 6"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-                <h2 className="text-xs md:text-sm font-normal">Delivered</h2>
-              </div>
-            </td>
-            <td className="px-4 py-4 text-xs md:text-sm whitespace-nowrap">
-              <div className="flex items-center gap-x-6">
-                <Link
-                  href={`/order/${order?._id}`}
-                  className="text-blue-500 transition-colors duration-200 hover:text-indigo-500 focus:outline-none"
-                >
-                  <MdOutlineRemoveRedEye size={20}/>
-                </Link>
-              </div>
-            </td>
-          </tr>
-          ))
-        ) : (
-          <tr>
-            <td className="px-4 py-4 text-xs md:text-sm text-gray-500 whitespace-nowrap" colSpan={6}>
-              <div className="flex items-center justify-center">
-                <h2 className="text-xl md:text-2xl font-light text-gray-500">
-                  No orders found
-                </h2>
-              </div>
-            </td>
-          </tr>
-        )}
-          
-            {/* <tr>
+          {orders.length > 0 ? (
+            orders.map((order) => (
+              <tr key={order?._id}>
+                <td className="px-4 py-4 text-xs md:text-sm font-medium text-gray-700 whitespace-nowrap">
+                  <div className="inline-flex items-center gap-x-3">
+                    <span>#{order?._id}</span>
+                  </div>
+                </td>
+                <td className="px-4 py-4 text-xs md:text-sm text-gray-500 whitespace-nowrap">
+                  {new Date(order?.createdAt).toLocaleDateString()}
+                </td>
+                <td className="px-4 py-4 text-xs md:text-sm font-medium text-gray-700 whitespace-nowrap">
+                  <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60">
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M10 3L4.5 8.5L2 6"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    <h2 className="text-xs md:text-sm font-normal">
+                      {order?.status}
+                    </h2>
+                  </div>
+                </td>
+                <td className="px-4 py-4 text-xs md:text-sm font-medium text-gray-700 whitespace-nowrap">
+                  <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60">
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M10 3L4.5 8.5L2 6"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    <h2 className="text-xs md:text-sm font-normal">
+                      Delivered
+                    </h2>
+                  </div>
+                </td>
+                <td className="px-4 py-4 text-xs md:text-sm whitespace-nowrap">
+                  <div className="flex items-center gap-x-6">
+                    <Link
+                      href={`/order/${order?._id}`}
+                      className="text-blue-500 transition-colors duration-200 hover:text-indigo-500 focus:outline-none"
+                    >
+                      <MdOutlineRemoveRedEye size={20} />
+                    </Link>
+                  </div>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td
+                className="px-4 py-4 text-xs md:text-sm text-gray-500 whitespace-nowrap"
+                colSpan={6}
+              >
+                <div className="flex items-center justify-center">
+                  <h2 className="text-xl md:text-2xl font-light text-gray-500">
+                    No orders found
+                  </h2>
+                </div>
+              </td>
+            </tr>
+          )}
+
+          {/* <tr>
               <td className="px-4 py-4 text-xs md:text-sm text-gray-500 whitespace-nowrap" colSpan={6}>
                 <div className="flex items-center justify-center">
                   <h2 className="text-xl md:text-2xl font-light text-gray-500">

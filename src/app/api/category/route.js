@@ -1,3 +1,4 @@
+// export const dynamic = 'force-dynamic';
 import Category from "@/app/models/categoryDB";
 import { NextResponse } from "next/server";
 import connectMongoDB from "@/app/libs/mongodb";
@@ -21,7 +22,7 @@ export async function POST(request) {
     // save the object to database
     const createCategory = await category.save();
     const response = NextResponse.json(createCategory, {
-      status: 200,
+      status: 201,
     });
     return response;
   } catch (error) {
@@ -29,6 +30,8 @@ export async function POST(request) {
     return NextResponse.json({
       message: "failed to create category !!",
       status: false,
+    }, {
+      status: 400,
     });
   }
 }
@@ -36,7 +39,6 @@ export async function POST(request) {
 export async function DELETE(request, { params }) {
   const { searchParams } = new URL(request.url);
   const categoryId = searchParams.get("categoryId");
-//   console.log("params : ", categoryId);
   const deleteCategory = await Category.findByIdAndDelete(categoryId);
   if (deleteCategory) {
     return NextResponse.json({
@@ -54,3 +56,5 @@ export async function DELETE(request, { params }) {
     );
   }
 }
+
+

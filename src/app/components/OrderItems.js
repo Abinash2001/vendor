@@ -1,6 +1,7 @@
 import React from "react";
 
 const OrderItems = ({ orderDetail }) => {
+  // console.log("orderDetail",orderDetail);
   return (
     <div className="flex py-5 gap-3 md:gap-5 border-b">
       {/* Image Start */}

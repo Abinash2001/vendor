@@ -8,7 +8,7 @@ import { FaRegImages } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 import Select from "react-select";
 
-const page = () => {
+const AddProduct = () => {
   const [categories, setCategories] = useState([]);
   const [color, setColor] = useState("");
   const [product, setProduct] = useState({
@@ -401,4 +401,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default AddProduct;

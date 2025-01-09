@@ -1,26 +1,26 @@
-'use client'
-import React, { useState, useEffect } from "react";
+'use client';
+import React, { useEffect, useState } from "react";
 import Wrapper from "./Wrapper";
 import { AiOutlineMore, AiOutlineShoppingCart } from "react-icons/ai";
 import { getProduct } from '../services/productService';
 import { getOrders } from '../services/orderService';
 
-export const Card = () => {
-  const [totalProducts, setTotalProducts] = useState([]);
-  const [totalOrders, setTotalOrders] = useState([]);
+export const Card = async () => {
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [totalOrders, setTotalOrders] = useState(0);
+
   useEffect(() => {
     const fetchTotalProducts = async () => {
-      try {
-        const products=await getProduct();
-        setTotalProducts(products.length);
-        const orders=await getOrders();
-        setTotalOrders(orders.length);
-      } catch (error) {
-        console.log(error);
-        console.log("error on getTotalProduct function call");
-      }
+      const totalProducts = await getProduct();
+      setTotalProducts(totalProducts.length);
     };
     fetchTotalProducts();
+
+    const fetchTotalOrders = async () => {
+      const totalOrders = await getOrders();
+      setTotalOrders(totalOrders.length);
+    };
+    fetchTotalOrders();
   }, []);
   return (
     <Wrapper>

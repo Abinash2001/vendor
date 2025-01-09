@@ -18,7 +18,7 @@ import { FiCheckCircle, FiXCircle } from "react-icons/fi";
 import { toast } from "react-toastify";
 import Pagination from "../components/Pagination";
 
-const page = ({ searchParams }) => {
+const ViewProduct = ({ searchParams }) => {
   // console.log("searchParams.page",page);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -264,4 +264,4 @@ const page = ({ searchParams }) => {
   );
 };
 
-export default page;
+export default ViewProduct;

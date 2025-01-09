@@ -4,29 +4,45 @@ import connectMongoDB from "@/app/libs/mongodb";
 
 connectMongoDB();
 
-export async function GET(request, params) {
+export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const perPage = searchParams.get("perPage");
   const page = searchParams.get("page");
   const category = searchParams.get("category");
-  // console.log("page: ",page);
-  // // console.log("request: ",request.json());
-  // // const {perPage} = await request.json();
-  // console.log("perPage: ",perPage);
-  console.log("category: ", category);
-  const filter = category ? { category } : {};
-  const products = await Product.find(filter)
-    .populate("category")
-    .limit(parseInt(perPage))
-    .skip(parseInt(perPage) * (parseInt(page) - 1));
-  const totalProductLength = await Product.find().countDocuments(filter);
 
-  return NextResponse.json(
-    { products, totalProductLength },
-    {
-      status: 200,
-    }
-  );
+  const filter = category ? { category } : {};
+  if (perPage && page) {
+    const skip = parseInt(perPage) * (parseInt(page) - 1);
+    const limit = parseInt(perPage);
+    const products = await Product.find(filter)
+      .populate("category")
+      .skip(skip)
+      .limit(limit);
+    const totalProductLength = await Product.find().countDocuments(filter);
+    return NextResponse.json({ products, totalProductLength }, { status: 200 });
+  } else {
+    const totalProductLength = await Product.find().countDocuments(filter);
+    return NextResponse.json(totalProductLength, { status: 200 });
+  }
+
+  // if (!perPage && !page && !category) {
+  //   const totalProductLength = await Product.find().countDocuments();
+  //   return NextResponse.json(totalProductLength, {
+  //     status: 200,
+  //   });
+  // } else {
+  //   const filter = category ? { category } : {};
+  //   const products = await Product.find(filter)
+  //     .populate("category")
+  //     .limit(parseInt(perPage))
+  //     .skip(parseInt(perPage) * (parseInt(page) - 1));
+  //   const totalProductLength = await Product.find().countDocuments(filter);
+  //   return NextResponse.json(
+  //     { products, totalProductLength },
+  //     {
+  //       status: 200,
+  //     }
+  //   );
 }
 
 export async function POST(request) {
@@ -42,7 +58,6 @@ export async function POST(request) {
     color,
     images,
   } = await request.json();
-  // console.log("api: ",product_name,product_description,original_price,discounted_price,stock_available,category,images);
   const product = new Product({
     product_name,
     product_slug,
@@ -56,12 +71,10 @@ export async function POST(request) {
     images,
   });
   try {
-    // console.log("images",product.images);
     // save the object to database
     const createProduct = await product.save();
-    // console.log("createProduct:",createProduct);
     const response = NextResponse.json(createProduct, {
-      message: "create product !!",
+      message: "create product successfully!!",
       status: 200,
     });
     return response;

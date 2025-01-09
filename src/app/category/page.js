@@ -21,7 +21,7 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { BiSolidEditAlt } from "react-icons/bi";
 import { FiCheckCircle, FiXCircle } from "react-icons/fi";
 
-function page() {
+function Category() {
   const [data, setData] = useState({
     name: "",
   });
@@ -215,13 +215,19 @@ function page() {
                       className="text-red-500 cursor-pointer"
                     />
                   </button>
-                  <button className="px-2 py-1 rounded hover:bg-slate-200"
-                    onClick={()=> handleActiveInactive(category._id, category.active)}
-                    >
+                  <button
+                    className="px-2 py-1 rounded hover:bg-slate-200"
+                    onClick={() =>
+                      handleActiveInactive(category._id, category.active)
+                    }
+                  >
                     {category.active ? (
-                        <FiCheckCircle size={20} className="text-green-500 mr-1" />
+                      <FiCheckCircle
+                        size={20}
+                        className="text-green-500 mr-1"
+                      />
                     ) : (
-                        <FiXCircle size={20} className="text-red-500 mr-1" />
+                      <FiXCircle size={20} className="text-red-500 mr-1" />
                     )}
                   </button>
                 </TableCell>
@@ -234,4 +240,4 @@ function page() {
   );
 }
 
-export default page;
+export default Category;

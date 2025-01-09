@@ -12,9 +12,10 @@ import Wrapper from "../components/Wrapper";
 import { getOrders } from "../services/orderService";
 import Link from "next/link";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
+import { FaCheck } from "react-icons/fa6";
 import Pagination from "../components/Pagination";
 
-const page = async ({ searchParams }) => {
+const Order = async ({ searchParams }) => {
   //pagination start here
   let page = parseInt(searchParams.page, 10); //?page= 4.1 then page = 4 or 4.9 then page = 4
   page = isNaN(page) || page < 1 ? 1 : page; //if page is not a number then page = 1
@@ -134,7 +135,7 @@ const page = async ({ searchParams }) => {
                     </td>
                     <td className="px-4 py-4text-[12px] font-medium text-gray-700 whitespace-nowrap">
                       <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60">
-                        <svg
+                        {/* <svg
                           width="12"
                           height="12"
                           viewBox="0 0 12 12"
@@ -148,7 +149,8 @@ const page = async ({ searchParams }) => {
                             stroke-linecap="round"
                             stroke-linejoin="round"
                           />
-                        </svg>
+                        </svg> */}
+                        <FaCheck size={12} />
                         <h2 className="text-[12px] font-normal">
                           {order?.status}
                         </h2>
@@ -161,7 +163,7 @@ const page = async ({ searchParams }) => {
                     </td>
                     <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
                       <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60">
-                        <svg
+                        {/* <svg
                           width="12"
                           height="12"
                           viewBox="0 0 12 12"
@@ -175,7 +177,8 @@ const page = async ({ searchParams }) => {
                             stroke-linecap="round"
                             stroke-linejoin="round"
                           />
-                        </svg>
+                        </svg> */}
+                        <FaCheck />
                         <h2 className="text-[12px] font-normal">Delivered</h2>
                       </div>
                     </td>
@@ -306,4 +309,4 @@ const page = async ({ searchParams }) => {
   );
 };
 
-export default page;
+export default Order;
