@@ -12,6 +12,7 @@ import Image from "next/image";
 const AddProduct = () => {
   const [categories, setCategories] = useState([]);
   const [color, setColor] = useState("");
+  const [loading, setLoading] = useState(false);
   const [product, setProduct] = useState({
     product_name: "",
     product_slug: "",
@@ -46,6 +47,7 @@ const AddProduct = () => {
 
   const handleAddProduct = async (event) => {
     event.preventDefault();
+    setLoading(true);
     // validate data....
 
     try {
@@ -65,6 +67,7 @@ const AddProduct = () => {
         toast.error("Please fill all the fields !!", {
           position: "bottom-right",
         });
+        setLoading(false);
         return;
       }
       const result = await addProduct(product);
@@ -86,6 +89,7 @@ const AddProduct = () => {
         color: [],
         images: [],
       });
+      setLoading(false);
     } catch (error) {
       console.log(error);
       console.log("error on addCategory function call");
@@ -357,7 +361,13 @@ const AddProduct = () => {
                   className="w-[150px] h-[150px] p-[10px] border rounded flex justify-center items-center relative"
                 >
                   {/* <img src={image} alt="image" className="w-full h-full" /> */}
-                  <Image src={image} alt="image" width={0} height={0} className="w-full h-full" />
+                  <Image
+                    src={image}
+                    alt="image"
+                    width={0}
+                    height={0}
+                    className="w-full h-full"
+                  />
 
                   <div
                     className="absolute right-2 top-2 bg-white rounded-full p-2 cursor-pointer"
@@ -388,7 +398,8 @@ const AddProduct = () => {
         <div className="flex gap-5 justify-center w-full">
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-600 py-2 px-3 rounded font-semibold text-white outline-none"
+            className={`bg-blue-500 hover:bg-blue-600 py-2 px-3 rounded font-semibold text-white outline-none ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={loading}
           >
             Add Product
           </button>

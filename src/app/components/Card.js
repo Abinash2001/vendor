@@ -7,7 +7,7 @@ import { getOrdersLength } from '../services/orderService';
 // import { getProduct } from '../services/productService';
 // import { getOrders } from '../services/orderService';
 
-export const Card =async () => {
+export const Card = () => {
   // const totalProducts = await getProductLength();
   // const totalOrders = await getOrdersLength();
   const [totalProducts, setTotalProducts] = useState(0);

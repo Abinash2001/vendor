@@ -29,7 +29,7 @@ export async function GET(request, { params }) {
     //   },
     // });
     // ------------------------------------------------------------------------
-  console.log("abinash", order.orderItems);
+  // console.log("abinash", order.orderItems);
   return NextResponse.json(order, {
     status: 200,
   });

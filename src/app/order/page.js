@@ -14,6 +14,8 @@ import Link from "next/link";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { FaCheck } from "react-icons/fa6";
 import Pagination from "../components/Pagination";
+// import Loading from "../loading";
+// import { Suspense } from 'react';
 
 const Order = async ({ searchParams }) => {
   //pagination start here
@@ -24,7 +26,8 @@ const Order = async ({ searchParams }) => {
 
   const data = await getOrders(perPage, page);
   const orders = data.orders;
-  const totalPages = Math.ceil(data.totalOrdersLength / perPage);
+  const OrdersLength = data.totalOrdersLength;
+  const totalPages = Math.ceil(OrdersLength / perPage);
 
   // const [orders, setOrders] = useState([]);
 
@@ -33,109 +36,116 @@ const Order = async ({ searchParams }) => {
   // }, []);
   // console.log("orders", orders);
   return (
-    <Wrapper>
-      <div className="bg-white my-5 p-5 rounded">
-        <h1 className="text-[30px] font-semibold mb-5">Order Details</h1>
-        <div className=" md:text-center bg-white my-10 justify-between">
-          {/* <label className='text-[16px] mr-10'>Product Category</label>
+    <>
+      {/* <Suspense fallback={<Loading />}> */}
+      {OrdersLength === 0 ? (
+        <div className="text-center text-2xl font-semibold my-10">
+          No Orders found.
+        </div>
+      ) : (
+        <Wrapper>
+          <div className="bg-white my-5 p-5 rounded">
+            <h1 className="text-[30px] font-semibold mb-5">Order Details</h1>
+            <div className=" md:text-center bg-white my-10 justify-between">
+              {/* <label className='text-[16px] mr-10'>Product Category</label>
                 <select className='border w-full lg:w-[80%] md:w-[70%] rounded p-[8px] mt-2 md:mt-0 mb-10 outline-blue-400'>
                     <option>Select Category</option>
                     <option>abi</option>
                     <option>abi</option>
                 </select> */}
-          {/* </div> */}
-          {/* <div> */}
-          <div>
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th
-                    scope="col"
-                    className="py-3.5 px-4 text-xs md:text-sm font-normal text-left rtl:text-right text-gray-500"
-                  >
-                    Invoice
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-4 py-3.5 text-xs md:text-sm font-normal text-left rtl:text-right text-gray-500"
-                  >
-                    User Id
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-4 py-3.5 text-xs md:text-sm font-normal text-left rtl:text-right text-gray-500"
-                  >
-                    User Name
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-4 py-3.5 text-xs md:text-sm font-normal text-left rtl:text-right text-gray-500"
-                  >
-                    Number
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-4 py-3.5 text-xs md:text-sm font-normal text-left rtl:text-right text-gray-500"
-                  >
-                    Amount
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-4 py-3.5 text-xs md:text-sm font-normal text-left rtl:text-right text-gray-500"
-                  >
-                    Payment Status
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-4 py-3.5 text-xs md:text-sm font-normal text-left rtl:text-right text-gray-500"
-                  >
-                    Gateway
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-4 py-3.5 text-xs md:text-sm font-normal text-left rtl:text-right text-gray-500"
-                  >
-                    Delivery Status
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-4 py-3.5 text-xs md:text-sm font-normal text-left rtl:text-right text-gray-500"
-                  >
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {orders.map((order) => (
-                  <tr key={order._id}>
-                    <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
-                      <div className="inline-flex items-center gap-x-3">
-                        <span>#{order?._id}</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
-                      <div className="inline-flex items-center gap-x-3">
-                        <span>#{order?.userId}</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
-                      <div className="inline-flex items-center gap-x-3">
-                        <span>Abinash</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
-                      <div className="inline-flex items-center gap-x-3">
-                        <span>{order?.phone}</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
-                      <div className="inline-flex items-center gap-x-3">
-                        <span>{order?.amount}</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-4text-[12px] font-medium text-gray-700 whitespace-nowrap">
-                      <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60">
-                        {/* <svg
+              {/* </div> */}
+              {/* <div> */}
+              <div>
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th
+                        scope="col"
+                        className="py-3.5 px-4 text-xs md:text-sm font-normal text-left rtl:text-right text-gray-500"
+                      >
+                        Invoice
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-4 py-3.5 text-xs md:text-sm font-normal text-left rtl:text-right text-gray-500"
+                      >
+                        User Id
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-4 py-3.5 text-xs md:text-sm font-normal text-left rtl:text-right text-gray-500"
+                      >
+                        User Name
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-4 py-3.5 text-xs md:text-sm font-normal text-left rtl:text-right text-gray-500"
+                      >
+                        Number
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-4 py-3.5 text-xs md:text-sm font-normal text-left rtl:text-right text-gray-500"
+                      >
+                        Amount
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-4 py-3.5 text-xs md:text-sm font-normal text-left rtl:text-right text-gray-500"
+                      >
+                        Payment Status
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-4 py-3.5 text-xs md:text-sm font-normal text-left rtl:text-right text-gray-500"
+                      >
+                        Gateway
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-4 py-3.5 text-xs md:text-sm font-normal text-left rtl:text-right text-gray-500"
+                      >
+                        Delivery Status
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-4 py-3.5 text-xs md:text-sm font-normal text-left rtl:text-right text-gray-500"
+                      >
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {orders.map((order) => (
+                      <tr key={order._id}>
+                        <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
+                          <div className="inline-flex items-center gap-x-3">
+                            <span>#{order?._id}</span>
+                          </div>
+                        </td>
+                        <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
+                          <div className="inline-flex items-center gap-x-3">
+                            <span>#{order?.userId}</span>
+                          </div>
+                        </td>
+                        <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
+                          <div className="inline-flex items-center gap-x-3">
+                            <span>Abinash</span>
+                          </div>
+                        </td>
+                        <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
+                          <div className="inline-flex items-center gap-x-3">
+                            <span>{order?.phone}</span>
+                          </div>
+                        </td>
+                        <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
+                          <div className="inline-flex items-center gap-x-3">
+                            <span>{order?.amount}</span>
+                          </div>
+                        </td>
+                        <td className="px-4 py-4text-[12px] font-medium text-gray-700 whitespace-nowrap">
+                          <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60">
+                            {/* <svg
                           width="12"
                           height="12"
                           viewBox="0 0 12 12"
@@ -150,20 +160,20 @@ const Order = async ({ searchParams }) => {
                             stroke-linejoin="round"
                           />
                         </svg> */}
-                        <FaCheck size={12} />
-                        <h2 className="text-[12px] font-normal">
-                          {order?.status}
-                        </h2>
-                      </div>
-                    </td>
-                    <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
-                      <div className="inline-flex items-center gap-x-3">
-                        <span>Online</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
-                      <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60">
-                        {/* <svg
+                            <FaCheck size={12} />
+                            <h2 className="text-[12px] font-normal">
+                              {order?.status}
+                            </h2>
+                          </div>
+                        </td>
+                        <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
+                          <div className="inline-flex items-center gap-x-3">
+                            <span>Online</span>
+                          </div>
+                        </td>
+                        <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
+                          <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60">
+                            {/* <svg
                           width="12"
                           height="12"
                           viewBox="0 0 12 12"
@@ -178,28 +188,30 @@ const Order = async ({ searchParams }) => {
                             stroke-linejoin="round"
                           />
                         </svg> */}
-                        <FaCheck />
-                        <h2 className="text-[12px] font-normal">Delivered</h2>
-                      </div>
-                    </td>
-                    <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
-                      <div className="inline-flex items-center gap-x-3">
-                        <Link
-                          href={`/order/${order?._id}`}
-                          className="text-blue-500 transition-colors duration-200 hover:text-indigo-500 focus:outline-none"
-                        >
-                          <MdOutlineRemoveRedEye size={20} />
-                        </Link>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          {/* --------------------------------------------------------------------------------------------- */}
-          {/* this Table is use for client side rendering */}
-          {/* <Table
+                            <FaCheck />
+                            <h2 className="text-[12px] font-normal">
+                              Delivered
+                            </h2>
+                          </div>
+                        </td>
+                        <td className="px-4 py-4 text-[12px] font-medium text-gray-700 whitespace-nowrap">
+                          <div className="inline-flex items-center gap-x-3">
+                            <Link
+                              href={`/order/${order?._id}`}
+                              className="text-blue-500 transition-colors duration-200 hover:text-indigo-500 focus:outline-none"
+                            >
+                              <MdOutlineRemoveRedEye size={20} />
+                            </Link>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {/* --------------------------------------------------------------------------------------------- */}
+              {/* this Table is use for client side rendering */}
+              {/* <Table
             aria-label="Example static collection table"
             className=" overflow-x-auto"
           >
@@ -300,12 +312,15 @@ const Order = async ({ searchParams }) => {
               </TableRow> *
             </TableBody>
           </Table> */}
-          {/* --------------------------------------------------------------------------------------------- */}
-          {/* </div> */}
-        </div>
-        <Pagination page={page} totalPages={totalPages} />
-      </div>
-    </Wrapper>
+              {/* --------------------------------------------------------------------------------------------- */}
+              {/* </div> */}
+            </div>
+            <Pagination page={page} totalPages={totalPages} />
+          </div>
+        </Wrapper>
+      )}
+      {/* </Suspense> */}
+    </>
   );
 };
 
