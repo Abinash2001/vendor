@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 const OrderItems = ({ orderDetail }) => {
@@ -6,10 +7,16 @@ const OrderItems = ({ orderDetail }) => {
     <div className="flex py-5 gap-3 md:gap-5 border-b">
       {/* Image Start */}
       <div className="shrink-0 aspect-square w-[50px] md:w-[120px]">
-        <img
+        {/* <img
           src={orderDetail?.productImg}
           // alt={orderDetail?.product_name}
           alt="product"
+        /> */}
+        <Image
+          src={orderDetail?.productImg}
+          alt={orderDetail?.product_name}
+          width={120}
+          height={120}
         />
       </div>
       {/* Image End */}

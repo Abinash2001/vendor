@@ -7,6 +7,7 @@ import { getCategory } from "../services/categoryService";
 import { FaRegImages } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 import Select from "react-select";
+import Image from "next/image";
 
 const AddProduct = () => {
   const [categories, setCategories] = useState([]);
@@ -355,7 +356,9 @@ const AddProduct = () => {
                   key={index}
                   className="w-[150px] h-[150px] p-[10px] border rounded flex justify-center items-center relative"
                 >
-                  <img src={image} alt="image" className="w-full h-full" />
+                  {/* <img src={image} alt="image" className="w-full h-full" /> */}
+                  <Image src={image} alt="image" width={0} height={0} className="w-full h-full" />
+
                   <div
                     className="absolute right-2 top-2 bg-white rounded-full p-2 cursor-pointer"
                     onClick={() => handleRemoveImage(index)}

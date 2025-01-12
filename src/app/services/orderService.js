@@ -1,14 +1,19 @@
 import { httpAxios } from "../libs/axiosHelper";
 
 export async function getOrders(perPage,page) {
-    if(!perPage && !page) {
-        const result = await httpAxios.get("/api/order").then(response => response.data);
-        return result;
-    }
-    else{
+    // if(!perPage && !page) {
+    //     const result = await httpAxios.get("/api/order").then(response => response.data);
+    //     return result;
+    // }
+    // else{
         const result = await httpAxios.get(`/api/order?perPage=${perPage}&page=${page}`).then(response => response.data);
         return result;
-    }
+    // }
+}
+
+export async function getOrdersLength(){
+    const result = await httpAxios.get("/api/order").then(response => response.data);
+    return result;
 }
 
 export async function getOrdersByUserId(userId) {

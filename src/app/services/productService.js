@@ -4,16 +4,19 @@ export async function addProduct(product){
     const result = await httpAxios.post("/api/product",product).then(response=>response.data);
     return result;
 }
-
+export async function getProductLength(){
+    const result = await httpAxios.get("/api/product").then(response=>response.data);
+    return result;
+}
 export async function getProduct(perPage,page,category){
-    if(!perPage && !page && !category){
-        const result = await httpAxios.get("/api/product").then(response=>response.data);
-        return result;
-    }
-    else{
+    // if(!perPage && !page && !category){
+    //     const result = await httpAxios.get("/api/product").then(response=>response.data);
+    //     return result;
+    // }
+    // else{
         const result = await httpAxios.get(`/api/product?perPage=${perPage}&page=${page}&category=${category}`).then(response=>response.data);
         return result;
-    }
+    // }
 }
 export async function getProductById(productId){
     const result = await httpAxios.get(`/api/product/${productId}`).then(response=>response.data);

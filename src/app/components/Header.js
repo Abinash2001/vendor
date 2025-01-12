@@ -9,6 +9,7 @@ import { CgProfile } from "react-icons/cg";
 import { AiOutlineLogout } from "react-icons/ai";
 import { BiMenuAltRight } from "react-icons/bi";
 import { VscChromeClose } from "react-icons/vsc";
+import Image from "next/image";
 
 export const Header = () => {
     const[mobileMenu,setMobileMenu]=useState(false);
@@ -45,7 +46,8 @@ export const Header = () => {
         <Wrapper className="h-[60px] flex justify-between items-center">
           
           <Link href="/">
-            <img src="/logo.svg" className="w-[40px] md:[60px]"/>
+            {/* <img src="/logo.svg" className="w-[40px] md:[60px]"/> */}
+            <Image src="/logo.svg" width={60} height={60} alt="logo" />
           </Link>
 
           <Menu showCatMenu={showCatMenu} setShowCatMenu={setShowCatMenu}/> 

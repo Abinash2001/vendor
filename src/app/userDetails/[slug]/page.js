@@ -3,11 +3,12 @@ import Wrapper from "@/app/components/Wrapper";
 import { getUserById } from "@/app/services/userService";
 import UserAddress from "@/app/components/UserAddress";
 import UserOrders from "@/app/components/UserOrders";
+import Image from "next/image";
 
 export default async function UserDetail({ params }) {
   const userId = params.slug;
   const userDetail = await getUserById(userId);
-//   console.log(userDetail);
+  //   console.log(userDetail);
   return (
     <Wrapper>
       <h1 className="text-[25px] font-semibold mb-5 mt-5">
@@ -16,7 +17,17 @@ export default async function UserDetail({ params }) {
       <div className="flex gap-5 ">
         <div className="p-5 w-1/5 flex rounded flex-col gap-4 bg-white">
           <div className="flex justify-center">
-            <img
+            {/* <img
+              className="w-[100px] h-[100px] rounded-full"
+              src={userDetail?.profilePic}
+              alt="profile pic"
+              style={{
+                backgroundColor: userDetail?.profilePic ? "" : "lightgrey",
+              }}
+            /> */}
+            <Image
+              width={0}
+              height={0}
               className="w-[100px] h-[100px] rounded-full"
               src={userDetail?.profilePic}
               alt="profile pic"
@@ -52,7 +63,7 @@ export default async function UserDetail({ params }) {
         </div>
         <div className="w-4/5 flex rounded flex-col gap-4">
           <UserAddress userId={userId} />
-          <UserOrders userId={userId}/>
+          <UserOrders userId={userId} />
         </div>
       </div>
     </Wrapper>

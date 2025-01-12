@@ -2,23 +2,27 @@
 import React, { useEffect, useState } from "react";
 import Wrapper from "./Wrapper";
 import { AiOutlineMore, AiOutlineShoppingCart } from "react-icons/ai";
-import { getProduct } from '../services/productService';
-import { getOrders } from '../services/orderService';
+import { getProductLength } from '../services/productService';
+import { getOrdersLength } from '../services/orderService';
+// import { getProduct } from '../services/productService';
+// import { getOrders } from '../services/orderService';
 
-export const Card = async () => {
+export const Card =async () => {
+  // const totalProducts = await getProductLength();
+  // const totalOrders = await getOrdersLength();
   const [totalProducts, setTotalProducts] = useState(0);
   const [totalOrders, setTotalOrders] = useState(0);
 
   useEffect(() => {
     const fetchTotalProducts = async () => {
-      const totalProducts = await getProduct();
-      setTotalProducts(totalProducts.length);
+      const totalProducts = await getProductLength();
+      setTotalProducts(totalProducts);
     };
     fetchTotalProducts();
 
     const fetchTotalOrders = async () => {
-      const totalOrders = await getOrders();
-      setTotalOrders(totalOrders.length);
+      const totalOrders = await getOrdersLength();
+      setTotalOrders(totalOrders);
     };
     fetchTotalOrders();
   }, []);
